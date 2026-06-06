@@ -6,11 +6,13 @@ description: >
   diagram or design document, or asks "what could go wrong?" Produces threat actor
   profiles, component-threat matrix, a threat register with STRIDE classification,
   data-flow diagram template, trust boundary identification, and prioritized
-  mitigations mapped to MITRE ATT&CK techniques.
-tags: [appsec, design, architecture, threat-model]
-role: [security-engineer, architect, appsec-engineer, vciso]
+  mitigations mapped to MITRE ATT&CK techniques. Also includes LINDDUN privacy
+  threat analysis for data protection impact assessments (DPIA) and GDPR/CCPA
+  compliance.
+tags: [appsec, design, architecture, threat-model, privacy]
+role: [security-engineer, architect, appsec-engineer, vciso, privacy-engineer]
 phase: [design, review]
-frameworks: [STRIDE, PASTA, MITRE-ATT&CK]
+frameworks: [STRIDE, PASTA, LINDDUN, MITRE-ATT&CK]
 difficulty: intermediate
 time_estimate: "30-60min"
 version: "1.0.0"
@@ -258,6 +260,117 @@ Threat: An attacker gains access to resources or actions beyond their authorized
 | Can an attacker exploit deserialization or injection for code execution? | Remote code execution via insecure deserialization |
 | Are default credentials and unnecessary services removed? | Default admin/admin on management interfaces |
 
+### Step 4(b): Apply LINDDUN per Element for Privacy Threats
+
+For every component and data flow identified in the DFD, additionally assess
+privacy threats using the LINDDUN methodology. LINDDUN is a privacy-focused
+threat modeling framework developed at KU Leuven that complements STRIDE by
+targeting privacy properties rather than security properties.
+
+Use the same DFD and component inventory from Steps 3 and 4. For each
+component and data flow that handles personal data (PII, PHI, financial data,
+behavioral data, or any data subject to privacy regulation), systematically ask
+the following questions organized by LINDDUN category.
+
+#### L — Linkability
+
+Threat: An attacker can sufficiently distinguish whether two or more data items
+or actions within the system are linked to the same data subject.
+
+| Question | Example Threat |
+|----------|---------------|
+| Can user actions across different sessions or services be correlated via a shared identifier? | Cross-service session correlation via common user ID or device fingerprint |
+| Are cookie-based identifiers shared across unrelated features or third-party domains? | Third-party tracking cookies link browsing across sites |
+| Do log entries or event streams contain enough context to link events to a specific individual? | Aggregated logs with user IDs enable re-identification of supposedly anonymous events |
+| Can data from different sources (e.g., CRM + web analytics) be joined to re-identify pseudonymized data? | Pseudonymized analytics combined with authenticated session data breaks pseudonymity |
+| Are data minimization principles applied — is only the minimum necessary data collected? | Collecting full user profile when only email is needed for the feature |
+
+#### I — Identifiability
+
+Threat: An attacker can sufficiently identify a data subject within a set of
+data subjects (i.e., the system enables singling out).
+
+| Question | Example Threat |
+|----------|---------------|
+| Does the system collect or generate unique identifiers that can be tied to an individual? | User IDs, device IDs, email addresses in analytics data |
+| Are quasi-identifiers (age, zip code, gender) present in released datasets without generalization? | k-anonymity violation in aggregate reports |
+| Can an attacker use data joins across services to identify individuals in anonymized datasets? | Re-identification attack on de-identified medical data via hospital visit dates |
+| Are authentication or session mechanisms that reveal identity used for anonymous features? | Requiring login for what should be an anonymous public feature |
+| Is differential privacy or aggregation applied before data leaves secure processing environments? | Raw event data exported for analysis without aggregation |
+
+#### N — Non-Repudiation (Privacy Context)
+
+Threat: A data subject can deny actions attributed to them, or the system
+cannot prove that a data subject was aware of or consented to a data processing
+activity. In the privacy context, this is about accountability and consent
+auditability.
+
+| Question | Example Threat |
+|----------|---------------|
+| Are consent records logged with immutable timestamps and the exact consent scope? | No audit trail proving when and what the user consented to |
+| Can consent withdrawal be traced back to a specific user action? | User claims they opted out but system has no record |
+| Are data processing (collection, sharing, deletion) actions logged with sufficient detail for regulatory audits? | Missing audit trail for data sharing with third parties |
+| Is there a mechanism to demonstrate compliance with data subject access requests (DSAR)? | No record of DSAR fulfillment history |
+| Can the system prove that privacy notices were presented to users at data collection time? | No versioned record of which privacy notice was shown to which user |
+
+#### D — Detectability
+
+Threat: An attacker can sufficiently determine whether a specific data item or
+action concerning a data subject exists in the system.
+
+| Question | Example Threat |
+|----------|---------------|
+| Do error messages or timing side-channels reveal whether a specific user exists? | Login error distinguishes "user not found" vs "wrong password" |
+| Do API responses differ in size or timing based on data presence? | Bucket listing reveals existence of specific object keys |
+| Can an attacker enumerate users via search, recovery flows, or public profiles? | Account recovery confirms email exists in system |
+| Are data stores encrypted such that attackers cannot determine what data exists? | Unencrypted metadata reveals file names or user lists |
+| Does access to data stores reveal the schema or structure of personal data? | Database schema exposed via SQL injection reveals PII table names |
+
+#### D — Disclosure of Information
+
+Threat: Personal or sensitive data is exposed to unauthorized parties. This
+overlaps with STRIDE's Information Disclosure but focuses specifically on
+personal data and privacy obligations.
+
+| Question | Example Threat |
+|----------|---------------|
+| Is personal data shared with third parties (processors, sub-processors) without adequate contractual safeguards? | Third-party SDK receives full PII when anonymized data would suffice |
+| Are privacy notices accurate about what data is shared and with whom? | Privacy notice says "anonymized" but actual data shared is pseudonymized |
+| Is personal data exposed in API responses beyond what the consuming feature needs? | User profile API returns internal flags, audit history, or unnecessary fields |
+| Are data retention limits enforced such that personal data is not stored indefinitely? | User deletion does not cascade to backups, logs, or analytics exports |
+| Is there a mechanism for data subjects to request disclosure of what data is held about them? | No DSAR fulfillment process implemented |
+
+#### U — Unawareness
+
+Threat: A data subject is unaware of the data processing activities conducted
+by the system, or is unable to exercise their rights.
+
+| Question | Example Threat |
+|----------|---------------|
+| Are users provided with a clear, understandable privacy notice before data collection? | Privacy notice buried in terms of service or written in legalese |
+| Are users informed about automated decision-making or profiling? | Credit scoring, recommendation algorithms, or AI decisions without transparency |
+| Can users easily exercise their rights (access, rectification, erasure, portability)? | No self-service portal; DSAR requires manual email to privacy team |
+| Are data subjects notified of data breaches as required by regulation? | No breach notification process or SLA defined |
+| Are third-party data processors and their privacy practices transparently communicated? | Users unaware that their data is shared with 15 third-party SDKs |
+
+#### N — Non-Compliance
+
+Threat: The system does not comply with applicable privacy regulations,
+standards, or policies (GDPR, CCPA/CPRA, HIPAA, LGPD, PIPEDA, etc.).
+
+| Question | Example Threat |
+|----------|---------------|
+| Has a Data Protection Impact Assessment (DPIA) been conducted for high-risk processing? | No DPIA for large-scale PII processing |
+| Are data processing agreements (DPAs) in place with all third-party data processors? | No DPA with cloud provider or analytics vendor |
+| Is there a lawful basis documented for each data processing purpose? | Consent collected but no record of what data processing was consented to |
+| Are cross-border data transfer mechanisms in place (SCCs, BCRs, adequacy decisions)? | User data stored in US for EU users without Standard Contractual Clauses |
+| Is there a Data Protection Officer (DPO) or responsible party for privacy oversight? | No one responsible for privacy compliance |
+
+**Integration with STRIDE:**
+- LINDDUN's **Disclosure of Information** overlaps with STRIDE's **Information Disclosure** — combine findings into a single register entry where applicable.
+- LINDDUN's **Non-Repudiation** overlaps with STRIDE's **Repudiation** but adds consent/accountability angle.
+- All other LINDDUN categories (Linkability, Identifiability, Detectability, Unawareness, Non-Compliance) are unique to privacy and have no STRIDE equivalent.
+
 ### Step 5: Build Component-Threat Matrix
 
 Synthesize the STRIDE-per-element analysis into a heatmap-style matrix. For each component, rate the threat level (H=High, M=Medium, L=Low, N=None) per STRIDE category based on Step 4 findings, then derive an overall risk.
@@ -391,16 +504,64 @@ Rank mitigations using the following prioritization criteria:
 
 Produce the threat register as a structured table. Each row represents one identified threat.
 
-| Threat ID | STRIDE Category | Description | Affected Component | ATT&CK TTP | Likelihood | Impact | Severity | Mitigation | Owner | Status |
-|-----------|----------------|-------------|-------------------|-------------|------------|--------|----------|------------|-------|--------|
-| TM-001 | Spoofing | Credential stuffing attack against login endpoint due to missing rate limiting and absent MFA | Auth Service `/api/v1/login` | T1078 — Valid Accounts | High | High | Critical | Implement rate limiting (max 10 attempts/min), enforce MFA for all users, deploy credential breach detection | Auth Team | Open |
-| TM-002 | Tampering | SQL injection in search parameter allows unauthorized data modification | Search Service `/api/v1/search?q=` | T1190 — Exploit Public-Facing Application | Medium | High | High | Use parameterized queries, implement input validation, deploy WAF SQL injection rules | Backend Team | Open |
-| TM-003 | Repudiation | Admin actions on user accounts not logged, preventing forensic reconstruction | Admin Dashboard | T1070 — Indicator Removal | Medium | Medium | Medium | Implement immutable audit logging for all admin actions with centralized log aggregation | Platform Team | Open |
-| TM-004 | Information Disclosure | API error responses include stack traces and internal service names in production | All API endpoints | T1552 — Unsecured Credentials | High | Medium | High | Implement generic error responses in production, route detailed errors to logging only | Backend Team | Open |
-| TM-005 | Denial of Service | Unbounded file upload allows resource exhaustion via large payload submission | File Upload `/api/v1/upload` | T1499.003 — Application Exhaustion Flood | High | Medium | High | Enforce max file size (10MB), implement request timeout, add rate limiting per user | Storage Team | Open |
-| TM-006 | Elevation of Privilege | IDOR vulnerability allows regular users to access other users' records by modifying resource ID | User Profile `/api/v1/users/{id}` | T1068 — Exploitation for Privilege Escalation | High | High | Critical | Implement object-level authorization checks, validate resource ownership at service layer | Backend Team | Open |
+| Threat ID | STRIDE / LINDDUN Category | Description | Affected Component | ATT&CK TTP | Privacy Category | Likelihood | Impact | Severity | Mitigation | Owner | Status |
+|-----------|--------------------------|-------------|-------------------|-------------|-----------------|------------|--------|----------|------------|-------|--------|
+| TM-001 | Spoofing | Credential stuffing attack against login endpoint due to missing rate limiting and absent MFA | Auth Service `/api/v1/login` | T1078 — Valid Accounts | N/A | High | High | Critical | Implement rate limiting (max 10 attempts/min), enforce MFA for all users, deploy credential breach detection | Auth Team | Open |
+| TM-002 | Tampering | SQL injection in search parameter allows unauthorized data modification | Search Service `/api/v1/search?q=` | T1190 — Exploit Public-Facing Application | N/A | Medium | High | High | Use parameterized queries, implement input validation, deploy WAF SQL injection rules | Backend Team | Open |
+| TM-003 | Repudiation | Admin actions on user accounts not logged, preventing forensic reconstruction | Admin Dashboard | T1070 — Indicator Removal | Non-Repudiation (Privacy) | Medium | Medium | Medium | Implement immutable audit logging for all admin actions with centralized log aggregation | Platform Team | Open |
+| TM-004 | Information Disclosure | API error responses include stack traces and internal service names in production | All API endpoints | T1552 — Unsecured Credentials | Disclosure of Information | High | Medium | High | Implement generic error responses in production, route detailed errors to logging only | Backend Team | Open |
+| TM-005 | Denial of Service | Unbounded file upload allows resource exhaustion via large payload submission | File Upload `/api/v1/upload` | T1499.003 — Application Exhaustion Flood | N/A | High | Medium | High | Enforce max file size (10MB), implement request timeout, add rate limiting per user | Storage Team | Open |
+| TM-006 | Elevation of Privilege | IDOR vulnerability allows regular users to access other users' records by modifying resource ID | User Profile `/api/v1/users/{id}` | T1068 — Exploitation for Privilege Escalation | Identifiability | High | High | Critical | Implement object-level authorization checks, validate resource ownership at service layer | Backend Team | Open |
 
 ## 6. Framework Reference
+
+### LINDDUN (KU Leuven, 2015)
+
+LINDDUN is a privacy-specific threat modeling framework developed at the
+DistriNet research group, KU Leuven. It provides a systematic mnemonic for
+identifying privacy threats against software systems by mapping each category
+to a violation of a privacy property:
+
+| LINDDUN Category | Privacy Property Violated | Description |
+|------------------|--------------------------|-------------|
+| Linkability | Unlinkability | Linking multiple data items or actions to the same data subject |
+| Identifiability | Anonymity | Identifying a specific data subject from a dataset |
+| Non-Repudiation (Privacy) | Accountability | Inability to prove or disprove a data subject's actions or consent |
+| Detectability | Undetectability | Determining whether a specific data item or action exists |
+| Disclosure of Information | Confidentiality | Exposing personal data to unauthorized parties |
+| Unawareness | Awareness | Data subjects unaware of data processing activities |
+| Non-Compliance | Compliance | Failure to meet regulatory or policy obligations |
+
+**Relationship to STRIDE:** LINDDUN and STRIDE are complementary. STRIDE
+targets *security* properties (authentication, integrity, non-repudiation,
+confidentiality, availability, authorization). LINDDUN targets *privacy*
+properties (unlinkability, anonymity, accountability, undetectability,
+confidentiality, awareness, compliance). Where they overlap (Disclosure of
+Information with STRIDE's Information Disclosure; Non-Repudiation with STRIDE's
+Repudiation), findings should be cross-referenced.
+
+**LINDDUN Methodology Steps:**
+
+1. **Define DFD** — Same Data Flow Diagram used in Step 3; ensure personal data
+   flows are explicitly identified and annotated with data classification.
+2. **Map Privacy Threats** — Apply the seven LINDDUN categories to each
+   component and data flow that processes personal data.
+3. **Identify Threat Scenarios** — For each privacy threat, describe the
+   concrete scenario: who (adversary), what (personal data), how (attack path).
+4. **Prioritize** — Use the same Likelihood x Impact risk matrix from Step 8,
+   adapted with privacy-specific impact criteria (regulatory fines, reputational
+   harm, data subject harm).
+5. **Elicit Privacy Solutions** — Map threats to privacy-enhancing technologies
+   (PETs): anonymization, pseudonymization, differential privacy, data
+   minimization, consent management, encryption, access controls.
+
+**Privacy Impact Criteria for Risk Matrix:**
+
+| Impact Level | Privacy-Specific Description |
+|-------------|------------------------------|
+| High | Identifiable PII breach affecting 500+ data subjects; GDPR Art. 83 fines up to 4% global turnover; systemic privacy program failure |
+| Medium | Pseudonymized data re-identification possible; incomplete consent records; single-subject data exposure |
+| Low | Minor privacy notice gap; documentation deficiency; no evidence of actual data subject harm |
 
 ### STRIDE (Microsoft, 2003)
 
@@ -489,3 +650,6 @@ This skill processes user-supplied content that may include system descriptions,
 8. **NIST SP 800-154** — Guide to Data-Centric System Threat Modeling — https://csrc.nist.gov/publications/detail/sp/800-154/draft
 9. **STRIDE Original Paper** — Kohnfelder, L. & Garg, P. (1999). "The Threats to Our Products." Microsoft Internal Document.
 10. **OWASP Risk Rating Methodology** — https://owasp.org/www-community/OWASP_Risk_Rating_Methodology
+11. **LINDDUN Framework** — https://linddun.org/
+12. **Deng, M., Wuyts, K., Scandariato, R., Preneel, B., & Joosen, W. (2011).** "A privacy threat analysis framework: supporting the elicitation and fulfillment of privacy requirements." *Requirements Engineering*, 16(1), 3-32. https://link.springer.com/article/10.1007/s00766-010-0115-7
+13. **Wuyts, K. & Joosen, W. (2015).** "LINDDUN: A privacy threat analysis framework." KU Leuven, Department of Computer Science, CW Reports.

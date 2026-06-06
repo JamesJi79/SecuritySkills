@@ -1,0 +1,69 @@
+# SIEM Detection Rule Metadata Schema (YAML)
+# Use this schema to package and version SIEM rules for deployment
+# Each rule gets its own .yaml file at deployment time
+
+rule:
+  # --- Identity ---
+  id: "siem-001"                    # Unique rule identifier
+  name: "Password Spray Detection"  # Human-readable display name
+  version: "1.0.0"                  # Semantic version (SemVer)
+  author: "unitoneai"               # Rule author/creator
+  created: "2026-03-05"             # ISO 8601 creation date
+  updated: "2026-06-03"             # ISO 8601 last modified date
+
+  # --- Classification ---
+  category: "credential-access"     # Detection category
+  severity: "high"                  # informatioonal | low | medium | high | critical
+  status: "active"                  # draft | testing | active | tuning | deprecated | retired
+  confidence: "medium"              # low | medium | high (how certain the detction is)
+
+  # --- MITRE ATT&CK ---
+  mitre:
+    tactics: ["Credential Access (TA0006)"]
+    techniques:
+      - id: "T1110"
+        name: "Brute Force"
+      - id: "T1110.003"
+        name: "Password Spraying"
+
+  # --- Platform ---
+  platform: "microsoft-sentinel"    # microsoft-sentinel | splunk | both
+  language: "kql"                   # kql | spl | sigma
+  data_source: "SigninLogs"         # Primary table/index
+  lookback_window: "1h"             # Query lookback period
+  run_frequency: "5m"               # How often the query runs
+
+  # --- Thresholds ---
+  thresholds:
+    min_distinct_accounts: 10       # Minimum unique accounts to trigger
+    min_attempts: null              # Minimum total attempts (null = not used)
+    time_window: "10m"              # Aggregation window
+
+  # --- Alerting ---
+  alert:
+    suppression_enabled: true
+    suppression_duration: "1h"
+    group_by_entities: ["Account", "IP"]
+    create_incident: true
+
+  # --- Performance ---
+  performance:
+    max_execution_time: "30s"       # Expected query execution time
+    estimated_daily_volume: 5000    # Estimated result rows per day
+    resource_intensive: false       # Is this query expensive?
+
+  # --- Deployment ---
+  deployment:
+    environment: "production"       # dev | staging | production
+    team: "SOC"                     # Owning team
+    ticket_ref: "SOC-2024-001"      # Change management ticket
+    ci_pipeline: "siem-rules-deploy" # CI/CD pipeline name
+
+  # --- Validation ---
+  validation:
+    last_tested: "2026-06-01"       # Date of last validation test
+    test_method: "atomic-red-team"  # How it was tested
+    test_id: "T1110.003"            # Specific test case
+    expected_tp: true               # Did it fire on known-bad?
+    measured_fp_rate: 0.05          # False positive rate (0-1)
+    notes: "Validated against Atomic Red Team T1110.003"

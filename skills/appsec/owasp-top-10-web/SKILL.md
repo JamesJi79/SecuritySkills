@@ -219,7 +219,8 @@ execute\(.*%s|execute\(.*\+|query\(.*\+|\.raw\(|\.rawQuery\(|\$\{.*\}.*SELECT|\.
 # OS command injection
 exec\(|system\(|popen\(|child_process|shell=True|Runtime\.getRuntime\(\)\.exec
 # XSS / template injection
-innerHTML|\.html\(|dangerouslySetInnerHTML|v-html|\|safe|\|raw|render_template_string
+innerHTML|.html\(|dangerouslySetInnerHTML|v-html|\|safe|\|raw|render_template_string
+# 🔍 Context-dependent: Flagging innerHTML/ dangerouslySetInnerHTML as Critical requires framework context check via gates/sanitizer-context-gate.md
 # NoSQL injection
 \$where|\$gt|\$ne|\$regex.*req\.|find\(.*req\.
 # Header injection

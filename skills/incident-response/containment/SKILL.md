@@ -69,7 +69,7 @@ NIST SP 800-61 Rev 2 (Section 3.3.1) identifies the following criteria for conta
 | Criterion | Question | Impact on Decision |
 |-----------|----------|-------------------|
 | **Potential damage** | How much additional damage can occur if containment is delayed? | Higher potential damage favors aggressive, immediate containment |
-| **Evidence preservation** | Will the containment action destroy critical evidence? | If volatile evidence is not yet captured, delay destructive containment |
+| **Evidence preservation** | Will the containment action destroy critical evidence? | If volatile evidence is not yet captured, delay destructive containment. For cloud resources, see `gates/cloud-identity-revocation-gate.md` for evidence-preserving alternatives |
 | **Service availability** | What business services will be affected by containment? | Business-critical systems may require surgical containment to minimize disruption |
 | **Resource requirements** | Does the containment strategy require resources not currently available? | Choose strategies executable with available tools and personnel |
 | **Duration** | How long will containment need to remain in place? | Long-duration containment must be sustainable without degrading business operations |

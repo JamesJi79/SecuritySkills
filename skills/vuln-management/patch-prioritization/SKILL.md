@@ -98,6 +98,8 @@ Assign or validate SLA tiers using the following matrix. SLA tiers are derived f
 |---|---|---|---|---|---|
 | **P0 -- Emergency** | 24 hours | Immediate | >= 0.7 OR active exploitation confirmed | Listed (ransomware: Known) | >= 9.0 Critical |
 | **P1 -- Critical** | 72 hours | Immediate or Out-of-Cycle | >= 0.4 | Listed | >= 7.0 High/Critical |
+
+> **EPSS Override Gate**: For CVSS >= 9.0 vulnerabilities with EPSS < 0.1 and no CISA KEV listing, see `gates/epss-risk-weighting-gate.md` for risk-based SLA adjustments. A rigid "all 9.0+ = 7-day SLA" produces unnecessary emergency change risk for vulnerabilities with negligible exploitation probability.
 | **P2 -- High** | 14 days | Out-of-Cycle | >= 0.1 | Not listed, PoC available | >= 7.0 High |
 | **P3 -- Medium** | 30 days | Scheduled | 0.01 - 0.1 | Not listed | 4.0 - 6.9 Medium |
 | **P4 -- Low** | 90 days | Scheduled or Defer | < 0.01 | Not listed | < 4.0 Low |

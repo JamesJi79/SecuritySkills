@@ -258,6 +258,7 @@ Assess:
 
 **Data Security (PR.DS)**
 - **PR.DS-01**: The confidentiality, integrity, and availability of data-at-rest are protected
+  > **Size-Appropriate Assessment**: When evaluating PR.DS-01, especially regarding customer-managed encryption keys (CMEK), see `gates/tier-encryption-gate.md`. For small-to-medium organizations, cloud-managed encryption keys (AWS/Azure/GCP default encryption) may satisfy the subcategory intent without requiring CMEK deployment. The absence of CMEK alone does not indicate a Tier 1 gap for SMEs.
 - **PR.DS-02**: The confidentiality, integrity, and availability of data-in-transit are protected
 - **PR.DS-10**: The confidentiality, integrity, and availability of data-in-use are protected
 - **PR.DS-11**: Backups of data are created, protected, maintained, and tested

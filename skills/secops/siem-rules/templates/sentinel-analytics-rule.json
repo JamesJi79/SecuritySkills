@@ -1,0 +1,138 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "workspaceName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the Log Analytics workspace."
+      }
+    },
+    "ruleName": {
+      "type": "string",
+      "metadata": {
+        "description": "Display name for the analytics rule."
+      }
+    },
+    "ruleDescription": {
+      "type": "string",
+      "metadata": {
+        "description": "Description of what the rule detects."
+      }
+    },
+    "severity": {
+      "type": "string",
+      "defaultValue": "Medium",
+      "allowedValues": ["Informational", "Low", "Medium", "High"],
+      "metadata": {
+        "description": "Alert severity level."
+      }
+    },
+    "queryFrequency": {
+      "type": "string",
+      "defaultValue": "PT5M",
+      "metadata": {
+        "description": "ISO 8601 duration (e.g., PT5M = every 5 minutes)."
+      }
+    },
+    "queryPeriod": {
+      "type": "string",
+      "defaultValue": "PT1H",
+      "metadata": {
+        "description": "ISO 8601 lookback period for the query."
+      }
+    },
+    "triggerThreshold": {
+      "type": "int",
+      "defaultValue": 0,
+      "metadata": {
+        "description": "Number of results that trigger the alert."
+      }
+    },
+    "suppressionDuration": {
+      "type": "string",
+      "defaultValue": "PT1H",
+      "metadata": {
+        "description": "ISO 8601 duration to suppress duplicate alerts."
+      }
+    },
+    "tactics": {
+      "type": "array",
+      "defaultValue": [],
+      "metadata": {
+        "description": "MITRE ATT&CK tactics (e.g., ['CredentialAccess'])."
+      }
+    },
+    "techniques": {
+      "type": "array",
+      "defaultValue": [],
+      "metadata": {
+        "description": "MITRE ATT&CK technique IDs (e.g., ['T1110', 'T1110.003'])."
+      }
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.OperationalInsights/workspaces/providers/alertRules",
+      "name": "[concat(parameters('workspaceName'), '/Microsoft.SecurityInsights/', parameters('ruleName'))]",
+      "apiVersion": "2022-11-01",
+      "kind": "Scheduled",
+      "properties": {
+        "displayName": "[parameters('ruleName')]",
+        "description": "[parameters('ruleDescription')]",
+        "severity": "[parameters('severity')]",
+        "enabled": true,
+        "query": "// PASTE KQL QUERY HERE\nSigninLogs\n| where TimeGenerated > ago(1h)\n| summarize count() by UserPrincipalName",
+        "queryFrequency": "[parameters('queryFrequency')]",
+        "queryPeriod": "[parameters('queryPeriod')]",
+        "triggerOperator": "GreaterThan",
+        "triggerThreshold": "[parameters('triggerThreshold')]",
+        "suppressionDuration": "[parameters('suppressionDuration')]",
+        "suppressionEnabled": true,
+        "tactics": "[parameters('tactics')]",
+        "techniques": "[parameters('techniques')]",
+        "alertRuleTemplateName": null,
+        "incidentConfiguration": {
+          "createIncident": true,
+          "groupingConfiguration": {
+            "enabled": true,
+            "reopenClosedIncident": false,
+            "lookbackDuration": "PT5H",
+            "matchingMethod": "AllEntities",
+            "groupByEntities": ["Account", "IP", "Host"],
+            "groupByAlertDetails": [],
+            "groupByCustomDetails": []
+          }
+        },
+        "eventGroupingSettings": {
+          "aggregationKind": "AlertPerResult"
+        },
+        "entityMappings": [
+          {
+            "entityType": "Account",
+            "fieldMappings": [
+              { "columnName": "UserPrincipalName", "identifier": "FullName" }
+            ]
+          },
+          {
+            "entityType": "IP",
+            "fieldMappings": [
+              { "columnName": "IPAddress", "identifier": "Address" }
+            ]
+          },
+          {
+            "entityType": "Host",
+            "fieldMappings": [
+              { "columnName": "Computer", "identifier": "HostName" }
+            ]
+          }
+        ],
+        "customDetails": {},
+        "alertDetailsOverride": {
+          "alertDisplayNameFormat": "[parameters('ruleName')]",
+          "alertDescriptionFormat": "[parameters('ruleDescription')]"
+        }
+      }
+    }
+  ]
+}

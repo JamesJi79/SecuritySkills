@@ -12,7 +12,7 @@ phase: [operate]
 frameworks: [MITRE-ATT&CK-v16]
 difficulty: intermediate
 time_estimate: "20-40min"
-version: "1.0.0"
+version: "1.1.0"
 author: unitoneai
 license: MIT
 allowed-tools: Read, Grep, Glob
@@ -547,9 +547,115 @@ Produce SIEM rule deliverables in this structure:
 ### Tuning Guidance
 - [Specific tuning recommendations]
 
-### Validation
-- [How to test the rule produces a true positive]
-```
+|### Validation
+|- Simulate the attack using Atomic Red Team: `Invoke-AtomicTest T1110.003`
+|- Or generate test events via the simulation script at `scripts/simulate-password-spray.sh`
+|- Assert that the query returns N+ results (N = threshold value minus 1)
+|- Assert that query execution time is under 30 seconds
+|- Validate entity mapping fields are populated (Account, IP, Host)
+|```
+|
+|---
+|
+|## 5a. Deployment Metadata
+|
+|Include structured deployment metadata for CI/CD-driven rule deployment.
+|
+|**Rule Metadata YAML (for all platforms):**
+|
+|```yaml
+|rule:
+|  id: "siem-001"
+|  name: "Password Spray Detection"
+|  version: "1.0.0"
+|  author: "unitoneai"
+|  status: "active"          # draft | testing | active | tuning | deprecated | retired
+|  platform: "microsoft-sentinel"  # microsoft-sentinel | splunk | both
+|  language: "kql"           # kql | spl
+|  severity: "high"          # informational | low | medium | high | critical
+|  mitre:
+|    tactics: ["Credential Access (TA0006)"]
+|    techniques:
+|      - id: "T1110"
+|        name: "Brute Force"
+|      - id: "T1110.003"
+|        name: "Password Spraying"
+|  thresholds:
+|    min_distinct_accounts: 10
+|    time_window: "10m"
+|  alert:
+|    suppression_enabled: true
+|    suppression_duration: "1h"
+|  validation:
+|    last_tested: "YYYY-MM-DD"
+|    test_method: "atomic-red-team"
+|    test_id: "T1110.003"
+|    expected_tp: true
+|```
+|
+|**Microsoft Sentinel — ARM Template (deploy via Azure DevOps / GitHub Actions):**
+|
+|```json
+|{
+|  "type": "Microsoft.OperationalInsights/workspaces/providers/alertRules",
+|  "name": "[concat(parameters('workspaceName'), '/Microsoft.SecurityInsights/', parameters('ruleName'))]",
+|  "apiVersion": "2022-11-01",
+|  "kind": "Scheduled",
+|  "properties": {
+|    "displayName": "Password Spray Detection",
+|    "description": "Detects 10+ distinct accounts with failed auth from same IP",
+|    "severity": "High",
+|    "enabled": true,
+|    "query": "[PASTE KQL QUERY HERE]",
+|    "queryFrequency": "PT5M",
+|    "queryPeriod": "PT1H",
+|    "triggerOperator": "GreaterThan",
+|    "triggerThreshold": 0,
+|    "suppressionEnabled": true,
+|    "suppressionDuration": "PT1H",
+|    "tactics": ["CredentialAccess"],
+|    "techniques": ["T1110", "T1110.003"],
+|    "incidentConfiguration": {
+|      "createIncident": true,
+|      "groupingConfiguration": {
+|        "enabled": true,
+|        "matchingMethod": "AllEntities",
+|        "groupByEntities": ["Account", "IP", "Host"]
+|      }
+|    },
+|    "entityMappings": [
+|      { "entityType": "Account", "fieldMappings": [{"columnName": "UserPrincipalName", "identifier": "FullName"}] },
+|      { "entityType": "IP", "fieldMappings": [{"columnName": "IPAddress", "identifier": "Address"}] }
+|    ]
+|  }
+|}
+|```
+|
+|**Splunk — savedsearches.conf snippet (deploy via Splunk Deployment Server / Ansible):**
+|
+|```ini
+|[SIEM - Password Spray Detection]
+|disabled = 0
+|enableSched = 1
+|cron_schedule = */5 * * * *
+|dispatch.earliest_time = -1h@h
+|dispatch.latest_time = @h
+|alert.settings = {"action.notable":{"enabled":1}}
+|search = index=wineventlog sourcetype="WinEventLog:Security" EventCode=4625 ...
+|action.notable.param.rule_title = SIEM - Password Spray Detection
+|action.notable.param.security_domain = access
+|```
+|
+|**CI/CD Pipeline Guidance:**
+|
+|1. Package each rule as `{rule-id}.yaml` with metadata, query, and thresholds (see `/templates/rule-metadata-schema.yaml`)
+|2. Store rules in a Git repository following `rules/{platform}/{category}/{rule-name}.yaml`
+|3. Run static validation: `bash scripts/validate-rule.sh --file rules/sentinel/password-spray.kql`
+|4. Deploy via ARM template (Sentinel) or savedsearches.conf (Splunk) through CI/CD:
+|   - Sentinel: `az deployment group create --template-file template.json`
+|   - Splunk: copy to `$SPLUNK_HOME/etc/apps/SA-ThreatIntelligence/local/savedsearches.conf`
+|5. Promote through environments: dev → staging → production with gated approvals
+|6. Tag each deployment with version and changelog entry
 
 ---
 
@@ -631,6 +737,24 @@ Deploying a rule without confirming it fires on known-malicious activity is depl
 ### Pitfall 5: Failing to Suppress Duplicate Alerts
 
 A detection rule that fires every 5 minutes on the same ongoing activity (e.g., a brute force attack lasting 2 hours) floods the alert queue with duplicates. Configure alert suppression or deduplication to prevent the same incident from generating hundreds of identical alerts. Use suppression windows and entity-based grouping to consolidate related alerts.
+
+### Pitfall 6: Ignoring Platform Quota and Truncation Limits
+
+KQL queries in Microsoft Sentinel have a 500,000 row result limit per query. Queries that aggregate over large time windows with high-cardinality fields (e.g., unique IP addresses) can silently truncate results without warning. The output appears correct but only covers the first 500K rows ordered by the query engine. Mitigations:
+- Use `summarize` early in the pipeline to reduce cardinality
+- Break large time windows into shorter overlapping queries
+- Use `limit` with a threshold that is deliberately below the 500K ceiling
+- Test queries at peak volume hours to validate result completeness
+
+For Splunk, be aware of `maxresultrows` (default 50,000 in search results) and `search_queue` limits. Large transactions or unbounded stats operations can cause search timeouts.
+
+### Pitfall 7: Time Zone Assumptions in Multi-Region Deployments
+
+Splunk's `_time` is always normalized to UTC, but Windows Security Event Logs record local time. When querying Windows Event IDs (e.g., 4624, 4625) in Splunk, the `_time` field reflects the event's ingestion time unless properly extracted. Similarly, KQL's `TimeGenerated` is based on the log source's clock, which may drift across regions. Mitigations:
+- Always use explicit time zone conversion: KQL `datetime_utc_to_local()`, SPL `convert timeformat=` with timezone
+- When comparing timestamps across data sources, normalize to UTC first
+- For "business hours" detections, define hours in UTC and document the time zone assumption
+- Consider using `datetime_add()` in KQL or `relative_time()` in SPL for time zone shifts
 
 ---
 

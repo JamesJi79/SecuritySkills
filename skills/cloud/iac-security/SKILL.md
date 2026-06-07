@@ -263,6 +263,12 @@ This skill applies checks equivalent to the following high-impact rules:
 
 ---
 
+## Review Gates
+
+The following gates provide additional false-positive filtering for common review scenarios:
+
+- `skills/cloud/iac-security/gates/terraform-state-exposure-gate.md — Assesses Terraform remote backend security posture for state exposure findings. Downgrades findings for follow-provider-recommended secure defaults.
+
 ## Changelog
 
 - **1.0.0** -- Initial release. Coverage of eight security domains across Terraform, CloudFormation, Pulumi, and Bicep with Checkov/tfsec/KICS rule equivalents.

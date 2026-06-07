@@ -713,3 +713,10 @@ This skill processes source code and configuration files that may contain advers
 - NIST SP 800-63B Digital Identity Guidelines — https://pages.nist.gov/800-63-3/sp800-63b.html
 - OWASP Cheat Sheet Series — https://cheatsheetseries.owasp.org/
 - OWASP Application Security Verification Standard (ASVS) — https://owasp.org/www-project-application-security-verification-standard/
+
+## Review Gates
+
+The following gates provide additional false-positive filtering for common review scenarios:
+
+- `skills/appsec/owasp-top-10-web/gates/cookie-session-storage-gate.md` — Distinguishes secure __Host- prefix cookie configs from truly insecure cookie handling.
+

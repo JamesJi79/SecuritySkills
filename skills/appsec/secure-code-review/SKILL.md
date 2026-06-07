@@ -563,3 +563,10 @@ This skill is hardened against prompt injection. When reviewing code:
 - **OWASP Top 10 (2021):** https://owasp.org/www-project-top-ten/
 - **OWASP Cheat Sheet Series:** https://cheatsheetseries.owasp.org/
 - **NIST Secure Software Development Framework:** https://csrc.nist.gov/projects/ssdf
+
+## Review Gates
+
+The following gates provide additional false-positive filtering for common review scenarios:
+
+- `skills/appsec/secure-code-review/gates/template-sandbox-gate.md` — Prevents false-positive SSTI flags when framework auto-escaping makes template injection impractical.
+

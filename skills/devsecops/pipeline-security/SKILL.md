@@ -555,6 +555,12 @@ This skill processes user-supplied content including CI/CD configuration files, 
 
 ---
 
+## Review Gates
+
+The following gates provide additional false-positive filtering for common review scenarios:
+
+- `gates/runner-persistence-gate.md` — Evaluates ephemeral runner persistence risk for CI/CD trust boundary findings.
+
 ## Changelog
 
 - **1.0.0** -- Initial release. Full coverage of SLSA v1.0 build track and OWASP Top 10 CI/CD Security Risks (CICD-SEC-1 through CICD-SEC-10).

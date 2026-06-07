@@ -469,6 +469,13 @@ This skill processes configuration files and code that may contain secret values
 
 ---
 
+## Review Gates
+
+The following gates provide additional false-positive filtering for common review scenarios:
+
+- `gates/secret-exposure-vs-control-gap-gate.md` — Distinguishes actual exposed secrets from missing preventative controls (e.g., no `.gitleaks.toml`, no pre-commit hooks) so control gaps are not misclassified as active exposure.
+- `gates/bootstrap-secret-zero-gate.md` — Assesses whether managed secret stores (AWS Secrets Manager, Azure Key Vault, GCP Secret Manager, Vault) provide adequate bootstrap/break-glass procedures, avoiding unnecessary custom bootstrap requirements.
+
 ## Changelog
 
 - **1.0.1** -- Add false positive filtering guidance: distinguish real secrets from placeholders/examples, verify entropy, scope findings to actual secrets (not architectural gaps).

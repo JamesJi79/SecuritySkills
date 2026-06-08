@@ -13,7 +13,7 @@ phase: [operate]
 frameworks: [SSVC-2.1, EPSS-v3, CISA-KEV]
 difficulty: intermediate
 time_estimate: "20-40min"
-version: "1.0.0"
+version: "1.0.1"
 author: unitoneai
 license: MIT
 allowed-tools: Read, Grep, Glob
@@ -361,6 +361,45 @@ Known Exploited Vulnerabilities catalog maintained by CISA. Contains CVEs with c
 - Machine-readable feed: https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json
 
 ---
+
+
+## EPSS v3 'Active Exploitation' Evidence Gates
+
+### Gate 1: Active Exploitation Verification
+
+Confirm EPSS 'Active Exploitation' scoring is based on real-world evidence:
+
+```
+# Evidence items (at least 2 required)
+- EPSS v3 score references CISA KEV or vendor advisory for active exploitation
+- Multiple independent threat sources confirm exploitation activity
+- Exploitation evidence includes CVE ID, date first seen, and campaign attribution
+- EPSS score distinguishes between proof-of-concept and active-in-the-wild
+```
+
+### Gate 2: Temporal Weighting Adjustment
+
+Verify the patch priority weighting is adjusted for active exploitation:
+
+```
+# Evidence items (at least 2 required)
+- Active exploitation adds weight multiplier to base EPSS score
+- Patches for actively exploited CVEs prioritized over non-exploited
+- Remediation SLA is shortened for actively exploited vulnerabilities
+- Weighting is documented and consistently applied across all CVEs
+```
+
+### Gate 3: Exploitation Lifecycle Tracking
+
+Track exploitation status changes over time:
+
+```
+# Evidence items (at least 2 required)
+- Exploitation status re-evaluated on a regular cadence
+- New exploitation reports trigger priority re-calculation
+- Patches for previously exploited CVEs remain deployed after exploitation window closes
+- Exploitation lifecycle data fed back into scoring model
+```
 
 ## Common Pitfalls
 

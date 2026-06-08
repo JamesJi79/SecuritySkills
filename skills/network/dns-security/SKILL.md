@@ -13,7 +13,7 @@ phase: [operate]
 frameworks: [NIST-SP-800-81-Rev2, CIS-Controls-v8]
 difficulty: intermediate
 time_estimate: "20-40min"
-version: "1.0.0"
+version: "1.0.1"
 author: unitoneai
 license: MIT
 allowed-tools: Read, Grep, Glob
@@ -373,6 +373,45 @@ abcdef0123456789.dnscat.example.com TXT
 | 3.12 | Segment Data Processing and Storage Based on Sensitivity | DNS resolver isolation per zone |
 
 ---
+
+
+## Dangling-Record and Takeover Evidence Gates
+
+### Gate 1: Vendor Reservation Verification
+
+Confirm the external provider still actively reserves the domain:
+
+```
+# Evidence items (at least 2 required)
+- External provider account shows active reservation
+- Provider API or status page confirms domain association
+- Support ticket or contract reference for domain reservation
+- Reservation expiry date documented and tracked
+```
+
+### Gate 2: Unclaimable Target Profile
+
+Document which endpoints and HTTP statuses are definitively unclaimable:
+
+```
+# Evidence items (at least 2 required)
+- Known unclaimable HTTP statuses documented (e.g., provider-specific 404 vs generic)
+- Provider documentation confirms domain cannot be claimed by third parties
+- Historical record: domain pointed to same provider >12 months without incident
+- Automatic verification: provider responds with definitive unclaimable marker
+```
+
+### Gate 3: Verification Freshness
+
+Assert the last dangling-record check is within policy-defined recency:
+
+```
+# Evidence items (at least 2 required)
+- Last DNS verification timestamp logged
+- Verification interval within policy limit (e.g., <7 days for external CNAMEs)
+- Automated re-verification scheduled on a recurring basis
+- Verification failure triggers alert for manual review
+```
 
 ## Common Pitfalls
 

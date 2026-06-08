@@ -435,3 +435,4 @@ Common Weakness Enumeration. A community-developed list of software and hardware
 The following gates provide additional false-positive filtering:
 
 - `gates/credential-safety-lockout-gate.md` — Assesses scanner credential scoping, rotation, and lockout policies.
+- `gates/suppression-lifecycle-gate.md` — Requires suppression lifecycle metadata (scope, approver, expiration, revalidation trigger) to prevent permanent suppressions after environment changes.

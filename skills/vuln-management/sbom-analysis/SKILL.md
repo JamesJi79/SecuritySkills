@@ -408,3 +408,10 @@ Published by NTIA in July 2021 as part of Executive Order 14028 implementation. 
 - EU Cyber Resilience Act: https://digital-strategy.ec.europa.eu/en/policies/cyber-resilience-act
 - OSV (Open Source Vulnerability Database): https://osv.dev/
 - GitHub Advisory Database: https://github.com/advisories
+
+## Review Gates
+
+The following gates provide additional false-positive filtering:
+
+- `gates/artifact-freshness-gate.md` — Requires SBOM-artifact binding (digest, build ID, pipeline) to confirm SBOM describes the exact deployed artifact.
+

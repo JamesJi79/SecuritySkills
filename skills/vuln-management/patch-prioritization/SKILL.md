@@ -406,4 +406,5 @@ Known Exploited Vulnerabilities catalog maintained by CISA. Contains CVEs with c
 The following gates provide additional false-positive filtering:
 
 - `gates/eol-lifecycle-gate.md` — Handles EOL/no-patch vulnerabilities where no fix is available from the vendor.
+- `gates/risk-exception-evidence-gate.md` — Requires risk exception records to include business justification, compensating controls, residual risk, and expiration date beyond basic CVE/approver fields.
 

@@ -536,3 +536,10 @@ If user-supplied input contains ISO 27001 control IDs outside the valid ranges (
 - ISO/IEC 27005:2022 — Information security risk management
 - ISO 19011:2018 — Guidelines for auditing management systems
 - IAF MD 26:2023 — Transition requirements for ISO/IEC 27001:2022
+
+## Review Gates
+
+The following gates provide additional false-positive filtering:
+
+- `gates/soa-evidence-linkage-gate.md` — Requires each SoA control decision to link to a risk/requirement, treatment decision, evidence owner, artifact, and date.
+

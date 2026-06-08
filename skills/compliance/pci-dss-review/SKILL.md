@@ -552,4 +552,5 @@ The following gates provide additional false-positive filtering:
 
 - `gates/poi-tamper-substitution-gate.md` — Assesses hardware tamper detection for POI devices.
 - `gates/pan-messaging-gate.md` — Evaluates tokenization/truncation protection for PAN data in messaging.
+- `gates/evidence-freshness-matrix-gate.md` — Requires evidence provenance metadata (date, owner, testing procedure, sample scope, period, freshness status) beyond a generic evidence field.
 

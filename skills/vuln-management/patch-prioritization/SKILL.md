@@ -400,3 +400,10 @@ Known Exploited Vulnerabilities catalog maintained by CISA. Contains CVEs with c
 - ISO 27005:2022 (Risk Treatment): https://www.iso.org/standard/80585.html
 - PCI DSS 4.0 Requirement 6.3.3: https://www.pcisecuritystandards.org/
 - ITIL 4 Change Enablement: https://www.axelos.com/certifications/itil-service-management
+
+## Review Gates
+
+The following gates provide additional false-positive filtering:
+
+- `gates/eol-lifecycle-gate.md` — Handles EOL/no-patch vulnerabilities where no fix is available from the vendor.
+

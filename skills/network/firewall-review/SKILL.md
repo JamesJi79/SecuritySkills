@@ -384,6 +384,12 @@ This skill processes firewall configurations that may contain user-supplied comm
 
 ---
 
+## Review Gates
+
+The following gates provide additional false-positive filtering:
+
+- `gates/remote-access-vpn-gate.md` — Assesses split-tunnel VPN risk with endpoint compliance verification.
+
 ## Changelog
 
 - **1.0.0** -- Initial release. Full coverage of CIS Controls v8 (4.4, 4.5) and NIST SP 800-41 Rev 1 firewall audit methodology.

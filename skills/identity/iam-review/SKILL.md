@@ -509,3 +509,10 @@ This skill processes user-supplied content including IAM policies, access config
 | Version | Date | Changes |
 |---|---|---|
 | 1.0.0 | 2025-03-06 | Initial release |
+
+## Review Gates
+
+The following gates provide additional false-positive filtering:
+
+- `gates/oauth-consent-grant-gate.md` — Evaluates OAuth scope proportionality and admin consent requirements.
+

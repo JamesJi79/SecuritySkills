@@ -229,6 +229,12 @@ Produce the final report using the structure defined in the Output Format sectio
 
 ---
 
+## Review Gates
+
+The following gates provide additional false-positive filtering:
+
+- `gates/functions-http-key-gate.md` — Evaluates Azure Functions authLevel runtime key protection for HTTP triggers.
+
 ## Changelog
 
 - **1.0.0** -- Initial release. Full coverage of CIS Microsoft Azure Foundations Benchmark v2.1.0 sections 1 through 9.

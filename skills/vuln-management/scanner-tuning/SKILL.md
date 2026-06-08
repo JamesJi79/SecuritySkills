@@ -429,3 +429,9 @@ Common Weakness Enumeration. A community-developed list of software and hardware
 - Grype: https://github.com/anchore/grype
 - Nuclei: https://docs.projectdiscovery.io/tools/nuclei/
 - NVD (NIST): https://nvd.nist.gov/
+
+## Review Gates
+
+The following gates provide additional false-positive filtering:
+
+- `gates/credential-safety-lockout-gate.md` — Assesses scanner credential scoping, rotation, and lockout policies.

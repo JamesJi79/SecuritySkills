@@ -497,3 +497,10 @@ This skill processes incident data that may include attacker-controlled content 
 11. **CISA Destructive Malware Guidance** -- https://www.cisa.gov/topics/cyber-threats-and-advisories
 12. **H-ISAC (Health Information Sharing and Analysis Center)** -- https://h-isac.org/
 13. **KrebsOnSecurity: Iran-backed wiper attack on Stryker medtech (2026)** -- https://krebsonsystems.com/2026/03/iran-backed-hackers-claim-wiper-attack-on-medtech-firm-stryker/
+
+## Review Gates
+
+The following gates provide additional false-positive filtering:
+
+- `gates/backup-recovery-credential-gate.md` — Assesses cloud-managed backup recovery vs static credential requirements.
+

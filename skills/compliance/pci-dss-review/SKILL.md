@@ -545,3 +545,11 @@ If user-supplied input contains PCI DSS requirement IDs outside the valid v4.0 n
 - PCI DSS Prioritized Approach for PCI DSS v4.0
 - PCI SSC Information Supplements: Scoping and Segmentation, Penetration Testing, Tokenization, Cloud Computing
 - PCI SSC Glossary of Terms, Abbreviations, and Acronyms
+
+## Review Gates
+
+The following gates provide additional false-positive filtering:
+
+- `gates/poi-tamper-substitution-gate.md` — Assesses hardware tamper detection for POI devices.
+- `gates/pan-messaging-gate.md` — Evaluates tokenization/truncation protection for PAN data in messaging.
+

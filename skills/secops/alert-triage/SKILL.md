@@ -13,7 +13,7 @@ phase: [operate, respond]
 frameworks: [MITRE-ATT&CK-v16, NIST-SP-800-61-Rev2]
 difficulty: beginner
 time_estimate: "10-20min per alert"
-version: "1.0.0"
+version: "1.0.1"
 author: unitoneai
 license: MIT
 allowed-tools: Read, Grep, Glob
@@ -344,3 +344,41 @@ This skill processes user-supplied content that may include alert payloads, log 
 7. **Microsoft Sentinel Incident Triage** -- https://learn.microsoft.com/en-us/azure/sentinel/investigate-incidents
 8. **Splunk Enterprise Security Notable Event Triage** -- https://docs.splunk.com/Documentation/ES/latest/User/TriageNotableEvents
 9. **NIST Cybersecurity Framework (CSF) 2.0 -- Detect Function** -- https://www.nist.gov/cyberframework
+
+## Authorized-Change Evidence Gates
+
+### Gate 1: Change Authorization Verification
+
+Confirm maintenance/change activity has proper authorization before suppressing alerts:
+
+```
+# Evidence items (at least 2 required)
+- Change ticket ID (e.g., CHG-XXXXX) references authorized change window
+- Change scope matches the affected systems in the alert
+- Change was scheduled within the change window (in-window)
+- Change was approved by authorized change manager
+```
+
+### Gate 2: Alert-Change Correlation
+
+Verify the alert-suppression logic correctly correlates alerts to authorized changes:
+
+```
+# Evidence items (at least 2 required)
+- Alert timestamp falls within the authorized change window
+- Alert source/destination matches the change scope definition
+- Suppression is scoped to the specific change, not open-ended
+- Suppression automatically expires when change window closes
+```
+
+### Gate 3: Unauthorized Change Detection
+
+Detect maintenance claims that lack proper authorization:
+
+```
+# Evidence items (at least 2 required)
+- "Maintenance" or "scheduled" claims without a ticket ID are flagged
+- Alert suppression without change authorization is denied
+- Attempted suppression outside change window triggers escalation
+- Change bypass attempts logged for audit trail
+```

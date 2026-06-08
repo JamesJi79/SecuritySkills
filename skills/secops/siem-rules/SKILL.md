@@ -12,7 +12,7 @@ phase: [operate]
 frameworks: [MITRE-ATT&CK-v16]
 difficulty: intermediate
 time_estimate: "20-40min"
-version: "1.0.0"
+version: "1.0.1"
 author: unitoneai
 license: MIT
 allowed-tools: Read, Grep, Glob
@@ -658,3 +658,41 @@ This skill processes user-supplied content that may include SIEM query drafts, l
 8. **MITRE ATT&CK Data Sources** -- https://attack.mitre.org/datasources/
 9. **Sentinel Entity Mapping** -- https://learn.microsoft.com/en-us/azure/sentinel/map-data-fields-to-entities
 10. **Splunk CIM (Common Information Model)** -- https://docs.splunk.com/Documentation/CIM/latest/User/Overview
+
+## Schema Drift and Data-Model Version Gates
+
+### Gate 1: Data-Model Version Alignment
+
+Verify the rule's expected field names match the current platform data model:
+
+```
+# Evidence items (at least 2 required)
+- Rule specifies target data-model version in metadata
+- Field names referenced in rule exist in current data model
+- Field type and format match the data-model definition
+- Deprecated field aliases mapped to current field names
+```
+
+### Gate 2: Schema-Drift Detection
+
+Check whether a rule still resolves correctly after a data-model update:
+
+```
+# Evidence items (at least 2 required)
+- Rule tested against current data-model version
+- Previous data-model mappings documented for regression
+- Schema change log reviewed for affected field paths
+- Rule has automated schema-compatibility test
+```
+
+### Gate 3: Fixture Coverage Verification
+
+Confirm unit test fixtures exercise mapped field paths end-to-end:
+
+```
+# Evidence items (at least 2 required)
+- Sample events include all mapped field paths
+- Fixtures cover both populated and null field states
+- Test output verifies field resolution through mapping layer
+- Negative test cases for missing or malformed fields
+```

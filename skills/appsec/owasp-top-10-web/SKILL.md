@@ -12,7 +12,7 @@ phase: [build, review]
 frameworks: [OWASP-Top-10-2021]
 difficulty: intermediate
 time_estimate: "30-60min"
-version: "1.0.1"
+version: "1.0.2"
 author: unitoneai
 license: MIT
 allowed-tools: Read, Grep, Glob
@@ -674,6 +674,45 @@ Present findings in this structure:
 | A08:2021 | Software and Data Integrity Failures | CWE-345, CWE-494, CWE-502, CWE-565 | Tampering and malicious updates |
 | A09:2021 | Security Logging and Monitoring Failures | CWE-117, CWE-223, CWE-532, CWE-778 | Undetected breaches |
 | A10:2021 | Server-Side Request Forgery (SSRF) | CWE-918, CWE-441 | Internal network/service access |
+
+
+## AI-Integrated Web App Vectors (OWASP Top-10 2025) Gates
+
+### Gate 1: LLM Prompt Injection Detection
+
+Verify prompt injection protection for AI-integrated web applications:
+
+```
+# Evidence items (at least 2 required)
+- Input sanitization for AI/LLM API endpoints documented
+- Prompt injection attack patterns (direct, indirect, jailbreak) tested
+- AI model output is validated before rendering to users
+- Rate limiting and content filtering on AI API endpoints
+```
+
+### Gate 2: AI Data Leakage Prevention
+
+Confirm AI features do not leak sensitive data through model responses:
+
+```
+# Evidence items (at least 2 required)
+- Training data and inference data boundaries documented
+- PII/PCI data exclusion from AI model context verified
+- AI model responses inspected for data leakage
+- User session data isolated between AI contexts
+```
+
+### Gate 3: AI Supply Chain Risk
+
+Evaluate risks from third-party AI model integrations:
+
+```
+# Evidence items (at least 2 required)
+- Third-party AI model provenance and security posture assessed
+- AI model update/version control process documented
+- Model poisoning and backdoor risks evaluated
+- API dependency on external AI providers has fallback/disconnect plan
+```
 
 ## Common Pitfalls
 

@@ -344,3 +344,10 @@ This skill processes user-supplied content that may include alert payloads, log 
 7. **Microsoft Sentinel Incident Triage** -- https://learn.microsoft.com/en-us/azure/sentinel/investigate-incidents
 8. **Splunk Enterprise Security Notable Event Triage** -- https://docs.splunk.com/Documentation/ES/latest/User/TriageNotableEvents
 9. **NIST Cybersecurity Framework (CSF) 2.0 -- Detect Function** -- https://www.nist.gov/cyberframework
+
+## Review Gates
+
+The following gates provide additional false-positive filtering:
+
+- `gates/visual-phishing-gate.md` — Distinguishes legitimate QR/visual content in emails from visual phishing indicators.
+

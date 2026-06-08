@@ -658,3 +658,10 @@ This skill processes user-supplied content that may include SIEM query drafts, l
 8. **MITRE ATT&CK Data Sources** -- https://attack.mitre.org/datasources/
 9. **Sentinel Entity Mapping** -- https://learn.microsoft.com/en-us/azure/sentinel/map-data-fields-to-entities
 10. **Splunk CIM (Common Information Model)** -- https://docs.splunk.com/Documentation/CIM/latest/User/Overview
+
+## Review Gates
+
+The following gates provide additional false-positive filtering:
+
+- `gates/ingestion-latency-gate.md` — Accounts for documented ingestion latency when evaluating detection time-window coverage.
+

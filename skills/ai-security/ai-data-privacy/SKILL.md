@@ -487,3 +487,10 @@ user input -> prompt assembly -> LLM API -> completion -> output -> logging/stor
 - Microsoft Presidio (PII detection and anonymization) -- https://github.com/microsoft/presidio
 - NIST SP 800-188, De-Identifying Government Datasets -- https://csrc.nist.gov/publications/detail/sp/800-188/final
 - Article 29 Working Party, Guidelines on Data Protection Impact Assessment (WP 248) -- https://ec.europa.eu/newsroom/article29/items/611236
+
+## Review Gates
+
+The following gates provide additional false-positive filtering:
+
+- `gates/dsar-deletion-propagation-gate.md` — Assesses DSAR deletion propagation from source records into AI downstream stores (vector DB, cache, logs).
+

@@ -562,6 +562,12 @@ This skill processes SAST configuration files, custom rules, and code patterns t
 
 ---
 
+## Review Gates
+
+The following gates provide additional false-positive filtering:
+
+- `gates/custom-rule-fixture-gate.md` — Evaluates whether custom SAST rules have adequate positive/negative test fixtures.
+
 ## Changelog
 
 - **1.0.0** -- Initial release. Full coverage of SAST configuration review against OWASP ASVS 4.0.3 and CWE Top 25, with Semgrep and CodeQL patterns.

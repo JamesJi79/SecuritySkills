@@ -587,3 +587,10 @@ Glob: **/security_architecture*
 12. Sequential Tool Attack Chains and Context Amnesia in Agentic AI (2026) -- arXiv:2603.12644
 13. Confused-Deputy Attacks and Cascading Failures in Long-Horizon Agent Workflows (2026) -- arXiv:2603.12230
 14. fabraix/playground -- Open-source AI agent red-team exploit library for validating agent permission boundaries and tool-use attack surface -- https://github.com/fabraix/playground
+
+## Review Gates
+
+The following gates provide additional false-positive filtering:
+
+- `gates/emergency-stop-rollback-gate.md` — Evaluates emergency stop and rollback drill evidence beyond design documentation.
+

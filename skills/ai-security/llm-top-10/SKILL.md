@@ -507,3 +507,10 @@ When performing a review using this skill:
 - LLM08:2025 Vector and Embedding Weaknesses: https://genai.owasp.org/llmrisk/llm08-vector-and-embedding-weaknesses/
 - LLM09:2025 Misinformation: https://genai.owasp.org/llmrisk/llm09-misinformation/
 - LLM10:2025 Unbounded Consumption: https://genai.owasp.org/llmrisk/llm10-unbounded-consumption/
+
+## Review Gates
+
+The following gates provide additional false-positive filtering:
+
+- `gates/citation-verification-gate.md` — Distinguishes citation-attributed factual claims from unsourced assertions in LLM outputs.
+

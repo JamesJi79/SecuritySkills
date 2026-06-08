@@ -12,7 +12,7 @@ phase: [design]
 frameworks: [NIST-RBAC, NIST-SP-800-162]
 difficulty: intermediate
 time_estimate: "45-90min"
-version: "1.0.0"
+version: "1.0.1"
 author: unitoneai
 license: MIT
 allowed-tools: Read, Grep, Glob
@@ -426,6 +426,45 @@ RBAC-MINE-06: Mining does not account for SoD constraints (mined roles may creat
 | **Auditability** | All policy evaluations logged with input attributes and decision rationale |
 
 ---
+
+
+## Temporal Role Expiry and Stale-Attribute Gates
+
+### Gate 1: Role Expiry Enforcement
+
+Verify the system enforces temporary role expiration:
+
+```
+# Evidence items (at least 2 required)
+- Role assignment includes explicit expiry timestamp
+- System rejects or revokes access after expiry
+- Expired role triggers notification to role owner and approver
+- Re-activation requires fresh approval workflow
+```
+
+### Gate 2: Stale-Attribute Reconciliation
+
+Check for role bindings tied to inactive or outdated attributes:
+
+```
+# Evidence items (at least 2 required)
+- Role membership checked against active directory/HRIS status
+- Orphaned role bindings from terminated users detected
+- Group membership changes cascade to role assignments
+- Stale roles older than 90 days flagged for review
+```
+
+### Gate 3: Temporal Re-Approval Cadence
+
+Verify roles exceeding policy-defined duration require re-approval:
+
+```
+# Evidence items (at least 2 required)
+- Maximum role duration defined in policy (e.g., 90 days)
+- Roles approaching expiry trigger re-approval workflow
+- Re-approval requires manager + security sign-off
+- Expired roles logged for audit trail
+```
 
 ## Common Pitfalls
 

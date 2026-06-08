@@ -12,7 +12,7 @@ phase: [build, deploy]
 frameworks: [SLSA-v1.0, CycloneDX, SPDX, CISA-KEV]
 difficulty: intermediate
 time_estimate: "15-30min"
-version: "1.0.0"
+version: "1.0.1"
 author: unitoneai
 license: MIT
 allowed-tools: Read, Grep, Glob
@@ -251,3 +251,55 @@ This skill processes user-supplied content including package manifests, lockfile
 - [NIST NVD](https://nvd.nist.gov/)
 - [OpenSSF Scorecard](https://securityscorecards.dev/)
 - [Executive Order 14028 - Improving the Nation's Cybersecurity](https://www.whitehouse.gov/briefing-room/presidential-actions/2021/05/12/executive-order-on-improving-the-nations-cybersecurity/)
+
+## Maintainer Takeover and Install-Script Behavior Evidence Gates
+
+### Gate 1: Maintainer History Check
+
+Evaluate publisher tenure, churn, and reputation:
+
+```
+# Evidence items (at least 2 required)
+- Publisher has >12 month history with the package
+- No recent (<90 days) maintainer additions or transfers
+- Publisher email/identity consistent across versions
+- No history of malicious packages under publisher account
+```
+
+### Gate 2: Publisher Provenance Verification
+
+Cross-check publisher identity with cryptographic verification:
+
+```
+# Evidence items (at least 2 required)
+- Package signed with Sigstore or GPG
+- Publisher identity matches GitHub verified org or known identity
+- npm provenance statement present and verifiable
+- Package attestation from CI build pipeline
+```
+
+### Gate 3: Install-Script Behavior Classification
+
+Categorize scripts by access type and conditionality:
+
+```
+# Evidence items (at least 2 required)
+- Script purpose documented (build, compile, code-gen)
+- No network access in install script (or blocked in CI)
+- No file-system write outside package directory
+- No conditional execution based on environment variables
+- Script is deterministic (same output given same input)
+```
+
+### Gate 4: CI Sandbox Evidence
+
+Confirm CI sandbox blocks dangerous access patterns:
+
+```
+# Evidence items (at least 2 required)
+- CI egress disabled during package install
+- Registry allow-list restricts install sources
+- Network access monitored and logged
+- File-system sandbox restricts write scope
+- Build runs in ephemeral environment (no persistent state)
+```

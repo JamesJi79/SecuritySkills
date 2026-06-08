@@ -12,7 +12,7 @@ phase: [design, operate]
 frameworks: [NIST-SP-800-207, CISA-ZTMM-v2]
 difficulty: advanced
 time_estimate: "90-180min"
-version: "1.0.0"
+version: "1.0.1"
 author: unitoneai
 license: MIT
 allowed-tools: Read, Grep, Glob
@@ -432,6 +432,45 @@ ZT-GOV-05: Regulatory zero trust mandates not tracked (OMB M-22-09 for federal)
 | **Optimal** | Adaptive, risk-based, continuous | Real-time posture assessment | Identity-aware microseg | Per-request authorization | Persistent protection |
 
 ---
+
+
+## Policy-Decision Trace and Stale Posture Gates
+
+### Gate 1: Policy-Decision Traceability
+
+Verify each ZTNA access decision has an audit trail back to the policy that granted it:
+
+```
+# Evidence items (at least 2 required)
+- Each access decision recorded with a unique policy decision ID
+- Audit log maps decision ID to specific policy version
+- Policy engine logs show which rules were evaluated for each decision
+- Decision ID is immutable and time-stamped
+```
+
+### Gate 2: Posture Freshness Gate
+
+Assert device posture checks are within policy-defined recency:
+
+```
+# Evidence items (at least 2 required)
+- Device last posture check timestamp recorded
+- Posture check recency within policy limit (e.g., <24h for high-risk apps)
+- Stale posture triggers step-up authentication or block
+- Posture check frequency adjusts based on risk level
+```
+
+### Gate 3: Subject-Device-Resource Binding
+
+Confirm the policy enforces all three dimensions:
+
+```
+# Evidence items (at least 2 required)
+- Policy binds specific subject identity to access
+- Policy requires verified device identity or attestation
+- Policy scopes access to specific resource or resource class
+- Binding is enforced at PEP, not just documented in policy
+```
 
 ## Common Pitfalls
 

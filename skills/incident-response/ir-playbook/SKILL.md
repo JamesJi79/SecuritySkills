@@ -13,7 +13,7 @@ phase: [respond, recover]
 frameworks: [NIST-SP-800-61r2, SANS-IH]
 difficulty: intermediate
 time_estimate: "30-60min"
-version: "1.0.1"
+version: "1.0.2"
 author: unitoneai
 license: MIT
 allowed-tools: Read, Grep, Glob
@@ -497,3 +497,41 @@ This skill processes incident data that may include attacker-controlled content 
 11. **CISA Destructive Malware Guidance** -- https://www.cisa.gov/topics/cyber-threats-and-advisories
 12. **H-ISAC (Health Information Sharing and Analysis Center)** -- https://h-isac.org/
 13. **KrebsOnSecurity: Iran-backed wiper attack on Stryker medtech (2026)** -- https://krebsonsystems.com/2026/03/iran-backed-hackers-claim-wiper-attack-on-medtech-firm-stryker/
+
+## Legal-Hold and Evidence Handoff Gates
+
+### Gate 1: Legal-Hold Authorization
+
+Confirm legal hold was issued by authorized entity before evidence collection:
+
+```
+# Evidence items (at least 2 required)
+- Legal hold ticket references authorized requester (legal/compliance)
+- Hold issued before or simultaneously with first evidence collection
+- Hold scope matches the incident scope
+- Authorization timestamp precedes evidence acquisition timestamp
+```
+
+### Gate 2: Chain-of-Custody Hash Chain
+
+Verify cryptographic signatures link each custodian transfer:
+
+```
+# Evidence items (at least 2 required)
+- Each evidence transfer includes hash of previous custody record
+- Custodian signatures captured at each handoff
+- Hash chain verifiable from collection through final disposition
+- Any break in chain documented with incident report
+```
+
+### Gate 3: Recipient Acknowledgment
+
+Confirm external recipients have cryptographically signed for evidence receipt:
+
+```
+# Evidence items (at least 2 required)
+- Recipient digitally signed evidence receipt
+- Receipt includes timestamp, recipient identity, and hash of evidence
+- Delivery method logged (encrypted channel, courier receipt)
+- Unacknowledged deliveries trigger escalation
+```

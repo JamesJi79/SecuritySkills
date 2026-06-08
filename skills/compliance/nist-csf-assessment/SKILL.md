@@ -13,7 +13,7 @@ phase: [assess, operate]
 frameworks: [NIST-CSF-2.0]
 difficulty: intermediate
 time_estimate: "90-180min"
-version: "1.0.0"
+version: "1.0.1"
 author: unitoneai
 license: MIT
 allowed-tools: Read, Grep, Glob
@@ -565,6 +565,45 @@ Tier 4 — Adaptive
 ```
 
 ---
+
+
+## AI-Specific GOVERN Metrics and NIST AI RMF Alignment Gates
+
+### Gate 1: AI Governance Framework Coverage
+
+Confirm the assessment covers NIST AI RMF governance functions:
+
+```
+# Evidence items (at least 2 required)
+- AI RMF GOVERN function (GV) assessed for AI-specific systems
+- AI risk management policy documented and attributed to accountable owner
+- AI system inventory maintained with risk classification
+- AI governance board or equivalent oversight body established
+```
+
+### Gate 2: AI Risk Mapping to CSF
+
+Verify AI-specific risks are mapped to CSF 2.0 functions:
+
+```
+# Evidence items (at least 2 required)
+- AI model risks mapped to GOV/IDENTIFY/PROTECT/DETECT/RESPOND/RECOVER
+- AI-specific threat scenarios documented (adversarial ML, data poisoning, etc.)
+- AI model bias and fairness risks assessed
+- Third-party AI model supply chain risks evaluated
+```
+
+### Gate 3: Continuous AI Monitoring
+
+Confirm AI-specific monitoring and reporting is in place:
+
+```
+# Evidence items (at least 2 required)
+- AI model performance and drift monitoring implemented
+- AI incident reporting procedure documented
+- Automated AI model behavior logging in place
+- Regular AI risk assessment cadence established
+```
 
 ## Common Pitfalls
 

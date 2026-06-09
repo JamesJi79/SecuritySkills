@@ -217,6 +217,12 @@ Produce the final report using the structure defined in the Output Format sectio
 
 ---
 
+
+
+### Evidence Gates
+
+**AWS-DB-01** — Snapshot sharing KMS audit. **AWS-DB-02** — IAM database auth. **AWS-DB-03** — PI KMS encryption.
+
 ## References
 
 - CIS Amazon Web Services Foundations Benchmark v3.0.0: https://www.cisecurity.org/benchmark/amazon_web_services

@@ -344,3 +344,9 @@ This skill processes user-supplied content that may include alert payloads, log 
 7. **Microsoft Sentinel Incident Triage** -- https://learn.microsoft.com/en-us/azure/sentinel/investigate-incidents
 8. **Splunk Enterprise Security Notable Event Triage** -- https://docs.splunk.com/Documentation/ES/latest/User/TriageNotableEvents
 9. **NIST Cybersecurity Framework (CSF) 2.0 -- Detect Function** -- https://www.nist.gov/cyberframework
+
+
+### Evidence Gates
+
+**ALT-TF-01** — NTP sync verification. **ALT-TF-02** — UTC normalization. **ALT-TF-03** — Per-event timestamps.
+

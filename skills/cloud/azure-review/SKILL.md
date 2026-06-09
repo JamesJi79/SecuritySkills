@@ -217,6 +217,12 @@ Produce the final report using the structure defined in the Output Format sectio
 
 ---
 
+
+
+### Evidence Gates
+
+**AZ-AK-01** — Local account disable. **AZ-AK-02** — Egress restriction. **AZ-AK-03** — KV CSI rotation poll.
+
 ## References
 
 - CIS Microsoft Azure Foundations Benchmark v2.1.0: https://www.cisecurity.org/benchmark/azure

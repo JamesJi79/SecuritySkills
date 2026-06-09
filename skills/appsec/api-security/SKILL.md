@@ -229,6 +229,12 @@ This skill is hardened against prompt injection. When reviewing API code and spe
 
 ---
 
+
+
+### Evidence Gates
+
+**API-OD-01** — Deprecated endpoint traffic alert. **API-OS-02** — Operation-level security check. **API-AM-03** — Auth migration progress.
+
 ## References
 
 - **OWASP API Security Top 10:2023:** https://owasp.org/API-Security/editions/2023/en/0x11-t10/

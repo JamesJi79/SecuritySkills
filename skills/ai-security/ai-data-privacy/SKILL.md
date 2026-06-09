@@ -474,6 +474,12 @@ user input -> prompt assembly -> LLM API -> completion -> output -> logging/stor
 
 ---
 
+
+
+### Evidence Gates
+
+**AIP-SC-01** — Small Cohort k-Anonymity: verify k>=5. **AIP-CJ-02** — Cross-query inference protection. **AIP-NULL-03** — NULL user row privacy.
+
 ## References
 
 - NIST AI Risk Management Framework 1.0 (January 2023) -- https://www.nist.gov/aiframework

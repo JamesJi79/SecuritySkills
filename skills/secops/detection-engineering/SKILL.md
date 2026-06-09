@@ -522,3 +522,9 @@ This skill processes user-supplied content that may include log samples, detecti
 10. **MITRE Cyber Analytics Repository (CAR)** -- https://car.mitre.org/
 11. **Detection Engineering Maturity Model** -- Kyle Bailey, https://kyle-bailey.medium.com/detection-engineering-maturity-matrix-f4f3181a5cc7
 12. **Sigma Rule Creation Guide (SigmaHQ)** -- https://sigmahq.io/docs/guide/rules.html
+
+
+### Evidence Gates
+
+**DET-TH-01** — Source health check. **DET-TH-02** — Field schema validation. **DET-TH-03** — FP ratio logging.
+

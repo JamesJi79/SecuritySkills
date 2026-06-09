@@ -598,6 +598,12 @@ This skill processes DAST configuration files that may contain target URLs, auth
 
 ---
 
+
+
+### Evidence Gates
+
+**DAST-SI-01** — Session isolation per run. **DAST-HR-02** — HAR token redaction. **DAST-CS-03** — CSRF token refresh interval.
+
 ## References
 
 - OWASP Top 10:2021: https://owasp.org/Top10/

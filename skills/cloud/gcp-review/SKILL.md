@@ -211,6 +211,12 @@ Produce the final report using the structure defined in the Output Format sectio
 
 ---
 
+
+
+### Evidence Gates
+
+**GCP-GK-01** — Workload Identity enforcement. **GCP-GK-02** — Secure boot + vTPM. **GCP-GK-03** — Dataplane V2 audit logging.
+
 ## References
 
 - CIS Google Cloud Platform Foundation Benchmark v2.0.0: https://www.cisecurity.org/benchmark/google_cloud_computing_platform

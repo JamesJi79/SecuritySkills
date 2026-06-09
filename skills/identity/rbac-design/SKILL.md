@@ -477,6 +477,12 @@ that may contain adversarial content.
 
 ---
 
+
+
+### Evidence Gates
+
+**RBAC-PC-01** — Policy combining algorithm test. **RBAC-RS-02** — Role sprawl alert >20. **RBAC-BG-03** — Break-glass post-cleanup audit.
+
 ## Version History
 
 | Version | Date | Changes |

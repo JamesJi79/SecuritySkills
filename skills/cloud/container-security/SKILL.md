@@ -276,6 +276,12 @@ Produce the final report using the structure defined in the Output Format sectio
 
 ---
 
+
+
+### Evidence Gates
+
+**CON-RI-01** — All-container non-root check. **CON-HP-02** — HostPath write rejection. **CON-AD-03** — Admission control enforcement.
+
 ## References
 
 - CIS Docker Benchmark v1.6.0: https://www.cisecurity.org/benchmark/docker

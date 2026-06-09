@@ -217,6 +217,12 @@ Produce the final report using the structure defined in the Output Format sectio
 
 ---
 
+
+
+### Evidence Gates
+
+**AWS-EK-01** — aws-auth ConfigMap audit. **AWS-EK-02** — Node SG restriction. **AWS-EK-03** — IRSA enforcement.
+
 ## References
 
 - CIS Amazon Web Services Foundations Benchmark v3.0.0: https://www.cisecurity.org/benchmark/amazon_web_services

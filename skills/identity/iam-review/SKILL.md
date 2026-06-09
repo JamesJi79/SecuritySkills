@@ -504,6 +504,12 @@ This skill processes user-supplied content including IAM policies, access config
 
 ---
 
+
+
+### Evidence Gates
+
+**IAM-SR-01** — Refresh token device binding. **IAM-RP-02** — Revocation propagation lag ≤5min. **IAM-SP-03** — Service principal token rotation.
+
 ## Version History
 
 | Version | Date | Changes |

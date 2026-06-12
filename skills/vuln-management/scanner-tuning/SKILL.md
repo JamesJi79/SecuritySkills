@@ -53,6 +53,10 @@ Before starting, collect or confirm:
 - [ ] **Result volume:** Approximate number of findings per scan cycle and false positive rate if known
 - [ ] **Compliance requirements:** Whether scans must meet specific compliance mandates (PCI ASV, DISA STIG, CIS Benchmark)
 - [ ] **Multi-scanner context:** If using multiple scanners, which ones and how results are currently correlated
+- [ ] **Scanner feed/plugin version:** Current plugin feed build, QID/feed database version, and last successful content update timestamp (per scanner and per sensor if distributed)
+- [ ] **Scanner engine support status:** Scanner engine, sensor, connector, and CLI version — confirmed against vendor EOL/support matrix
+- [ ] **Policy version sync:** For distributed scanners: whether sensor/agent policies match the central console policy revision; last confirmed sync timestamp
+- [ ] **Air-gapped or offline scanner handling:** If scanners operate in air-gapped or disconnected environments: feed import process, freshness SLA, signature/hash verification, and exception approval documentation
 
 ---
 
@@ -137,6 +141,7 @@ Configure or optimize scan policies to balance detection coverage, accuracy, and
 | **Plugin exclusions** | Confirmed persistent false positive across all assets for a specific plugin | False positive evidence for at least 3 scan cycles; periodic re-evaluation (quarterly) |
 | **Time-based exclusions** | Systems that cannot be scanned during business hours | Scan scheduling adjustment (see Step 6) |
 | **Credential exclusions** | Systems where credentialed scanning is not permitted by policy | Documented reason; accept reduced detection accuracy |
+| **Feed/plugin exclusion** (air-gapped or cached feeds) | Scanners with stale vulnerability feeds must have documented feed import process, freshness SLA, signature verification, and exception approval; lack of these is a coverage failure, not a quiet environment | Feed version evidence; freshness SLA documentation; periodic re-evaluation |
 
 ### Step 3: Authenticated vs. Unauthenticated Scanning
 

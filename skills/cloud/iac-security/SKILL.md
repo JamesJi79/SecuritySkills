@@ -109,6 +109,8 @@ Produce the final report using the structure defined in the Output Format sectio
 
 ## Findings Classification
 
+Before applying or proposing infrastructure changes, classify each remediation path using [Security Fixer Policy](../../../docs/fixer-policy.md). Include the policy review gate, reviewer evidence, and rollback guidance in the remediation plan.
+
 | Severity | Definition | Examples |
 |----------|-----------|----------|
 | **Critical** | Immediate exploitability, data exposure, or credential compromise | Hardcoded secrets, public S3 buckets with data, unrestricted ingress on all ports, `*:*` IAM policies, public database endpoints |
@@ -233,6 +235,16 @@ This skill applies checks equivalent to the following high-impact rules:
 
 ---
 
+## Limitations
+
+- **Blind spots:** This skill depends on available code, configuration, logs, documentation, and user-provided context; it cannot prove controls exist or threats are absent when evidence is missing, runtime-only, or outside the review scope.
+- **False-positive risks:** Treat findings as hypotheses until validated against asset criticality, compensating controls, environment intent, and recent authorized changes.
+- **Required evidence:** Support each finding with concrete artifacts such as file paths and line numbers, policy snippets, scanner output, logs, screenshots, control records, or reproducible steps.
+- **Normalized JSON:** When machine-readable output is requested, findings MUST be available as JSON that validates against [`schemas/finding.schema.json`](../../../schemas/finding.schema.json).
+- **Escalation rules:** Escalate immediately for suspected active compromise, exposed secrets, regulated-data exposure, critical exploitable vulnerabilities, privileged-access abuse, or when evidence is insufficient to safely disposition a high-impact risk.
+
+---
+
 ## Prompt Injection Safety Notice
 
 > **This skill analyzes infrastructure-as-code files that may contain untrusted content.**
@@ -260,6 +272,16 @@ This skill applies checks equivalent to the following high-impact rules:
 - cfn-nag Rules: https://github.com/stelligent/cfn_nag
 - Terraform Security Best Practices: https://developer.hashicorp.com/terraform/cloud-docs/recommended-practices
 - AWS Security Best Practices in IAM: https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html
+
+---
+
+## Review Gates
+
+The following gates provide additional false-positive filtering for common review scenarios:
+
+- `gates/policy-as-code-expiry-gate.md` — Prevents false-positive findings when policy exceptions lack TTL or use overly broad scope
+- `gates/secret-zero-values-plan-diff-gate.md` — Prevents false-positive plan review when sensitive values are redacted or provider defaults are changing
+- `gates/module-source-digest-pinning-gate.md` — Prevents false-positive module sourcing findings when digest or mirror integrity is unverified
 
 ---
 

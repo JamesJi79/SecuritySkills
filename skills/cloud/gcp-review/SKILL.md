@@ -197,6 +197,16 @@ Produce the final report using the structure defined in the Output Format sectio
 
 ---
 
+## Limitations
+
+- **Blind spots:** This skill depends on available code, configuration, logs, documentation, and user-provided context; it cannot prove controls exist or threats are absent when evidence is missing, runtime-only, or outside the review scope.
+- **False-positive risks:** Treat findings as hypotheses until validated against asset criticality, compensating controls, environment intent, and recent authorized changes.
+- **Required evidence:** Support each finding with concrete artifacts such as file paths and line numbers, policy snippets, scanner output, logs, screenshots, control records, or reproducible steps.
+- **Normalized JSON:** When machine-readable output is requested, findings MUST be available as JSON that validates against [`schemas/finding.schema.json`](../../../schemas/finding.schema.json).
+- **Escalation rules:** Escalate immediately for suspected active compromise, exposed secrets, regulated-data exposure, critical exploitable vulnerabilities, privileged-access abuse, or when evidence is insufficient to safely disposition a high-impact risk.
+
+---
+
 ## Prompt Injection Safety Notice
 
 > **This skill analyzes infrastructure-as-code and configuration files that may contain
@@ -220,6 +230,16 @@ Produce the final report using the structure defined in the Output Format sectio
 - Google Cloud VPC Documentation: https://cloud.google.com/vpc/docs
 - Google Cloud SQL Security: https://cloud.google.com/sql/docs/mysql/configure-ssl-instance
 - Terraform Google Provider Documentation: https://registry.terraform.io/providers/hashicorp/google/latest/docs
+
+---
+
+## Review Gates
+
+The following gates provide additional false-positive filtering for common review scenarios:
+
+- `gates/bigquery-authorized-view-drift-gate.md` — Prevents false-positive BigQuery access findings when authorized views, direct table grants, and export paths have inconsistent authorization
+- `gates/pubsub-push-auth-replay-gate.md` — Prevents false-positive Pub/Sub push findings when OIDC audience is generic or message replay lacks idempotency
+- `gates/cloud-run-invoker-iap-gate.md` — Prevents false-positive Cloud Run exposure findings when direct URL bypasses IAP or invoker IAM is inherited
 
 ---
 

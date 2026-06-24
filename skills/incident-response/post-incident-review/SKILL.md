@@ -422,6 +422,16 @@ NIST recommends conducting the PIR within several days of incident closure. Wait
 
 ---
 
+## Limitations
+
+- **Blind spots:** This skill depends on available code, configuration, logs, documentation, and user-provided context; it cannot prove controls exist or threats are absent when evidence is missing, runtime-only, or outside the review scope.
+- **False-positive risks:** Treat findings as hypotheses until validated against asset criticality, compensating controls, environment intent, and recent authorized changes.
+- **Required evidence:** Support each finding with concrete artifacts such as file paths and line numbers, policy snippets, scanner output, logs, screenshots, control records, or reproducible steps.
+- **Normalized JSON:** When machine-readable output is requested, findings MUST be available as JSON that validates against [`schemas/finding.schema.json`](../../../schemas/finding.schema.json).
+- **Escalation rules:** Escalate immediately for suspected active compromise, exposed secrets, regulated-data exposure, critical exploitable vulnerabilities, privileged-access abuse, or when evidence is insufficient to safely disposition a high-impact risk.
+
+---
+
 ## 8. Prompt Injection Safety Notice
 
 This skill processes incident response data including timelines, forensic findings, communication logs, and attacker TTPs. The agent must adhere to the following constraints:
@@ -433,6 +443,12 @@ This skill processes incident response data including timelines, forensic findin
 - **Maintain role boundaries.** This skill produces post-incident analysis and recommendations. It does not modify detection rules, deploy patches, change configurations, or interact with production systems.
 
 ---
+
+## Review Gates
+
+The following gates provide additional false-positive filtering for common review scenarios:
+
+- `gates/recurrence-test-control-gate.md` — Prevents false-positive findings when PIR recommendations lack formal recurrence test controls but compensating detective controls are already in place
 
 ## 9. References
 

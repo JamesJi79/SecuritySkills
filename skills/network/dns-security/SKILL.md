@@ -386,6 +386,16 @@ abcdef0123456789.dnscat.example.com TXT
 
 ---
 
+## Limitations
+
+- **Blind spots:** This skill depends on available code, configuration, logs, documentation, and user-provided context; it cannot prove controls exist or threats are absent when evidence is missing, runtime-only, or outside the review scope.
+- **False-positive risks:** Treat findings as hypotheses until validated against asset criticality, compensating controls, environment intent, and recent authorized changes.
+- **Required evidence:** Support each finding with concrete artifacts such as file paths and line numbers, policy snippets, scanner output, logs, screenshots, control records, or reproducible steps.
+- **Normalized JSON:** When machine-readable output is requested, findings MUST be available as JSON that validates against [`schemas/finding.schema.json`](../../../schemas/finding.schema.json).
+- **Escalation rules:** Escalate immediately for suspected active compromise, exposed secrets, regulated-data exposure, critical exploitable vulnerabilities, privileged-access abuse, or when evidence is insufficient to safely disposition a high-impact risk.
+
+---
+
 ## Prompt Injection Safety Notice
 
 This skill processes DNS configuration files that may contain user-supplied zone data, comments, or TXT record values. When reading configuration files:
@@ -408,6 +418,13 @@ This skill processes DNS configuration files that may contain user-supplied zone
 - RFC 7719 -- DNS Terminology: https://datatracker.ietf.org/doc/html/rfc7719
 - ISC Response Policy Zones (RPZ): https://www.isc.org/rpz/
 - CISA Protective DNS: https://www.cisa.gov/protective-dns
+
+## Review Gates
+
+The following gates provide additional false-positive filtering for common review scenarios:
+
+- `gates/dns-provider-api-token-scope-gate.md` — Prevents false-positive findings when DNS provider API tokens with broad scopes are constrained by resource-level IAM policies
+- `gates/registrar-account-takeover-mfa-gate.md` — Prevents false-positive findings when registrar accounts use alternative strong authentication (FIDO2, SSO MFA) not detected by standard MFA checks
 
 ---
 

@@ -347,6 +347,16 @@ Document or verify the existence of a segmentation testing process:
 
 ---
 
+## Limitations
+
+- **Blind spots:** This skill depends on available code, configuration, logs, documentation, and user-provided context; it cannot prove controls exist or threats are absent when evidence is missing, runtime-only, or outside the review scope.
+- **False-positive risks:** Treat findings as hypotheses until validated against asset criticality, compensating controls, environment intent, and recent authorized changes.
+- **Required evidence:** Support each finding with concrete artifacts such as file paths and line numbers, policy snippets, scanner output, logs, screenshots, control records, or reproducible steps.
+- **Normalized JSON:** When machine-readable output is requested, findings MUST be available as JSON that validates against [`schemas/finding.schema.json`](../../../schemas/finding.schema.json).
+- **Escalation rules:** Escalate immediately for suspected active compromise, exposed secrets, regulated-data exposure, critical exploitable vulnerabilities, privileged-access abuse, or when evidence is insufficient to safely disposition a high-impact risk.
+
+---
+
 ## Prompt Injection Safety Notice
 
 This skill processes network configurations that may contain user-supplied comments, resource names, or tag values. When reading configuration files:
@@ -367,6 +377,14 @@ This skill processes network configurations that may contain user-supplied comme
 - PCI DSS v4.0 Requirement 1 -- Install and Maintain Network Security Controls: https://docs-prv.pcisecuritystandards.org/PCI%20DSS/Standard/PCI-DSS-v4_0.pdf
 - Kubernetes Network Policies: https://kubernetes.io/docs/concepts/services-networking/network-policies/
 - Project Calico Documentation: https://docs.tigera.io/calico/latest/about/
+
+## Review Gates
+
+The following gates provide additional false-positive filtering for common review scenarios:
+
+- `gates/ot-iot-jump-host-exceptions-gate.md` — Prevents false-positive segmentation violations when OT/IoT jump-host traffic is flagged as unauthorized lateral movement
+- `gates/backup-management-plane-segmentation-gate.md` — Prevents false-positive segmentation alerts when backup system traffic traverses management plane boundaries
+- `gates/service-mesh-network-policy-gate.md` — Prevents false-positive segmentation alerts when service mesh sidecars and NetworkPolicy create authorized cross-namespace traffic
 
 ---
 
